@@ -1,18 +1,18 @@
 <template>
 	<div class="container">
-		<!-- <div class="check-date">
-			<DatePicker size="large" v-model="date" placeholder="选择日期"></DatePicker>
-            <Button type="primary" class="add-btn">删选</Button>
-			<Button type="primary" class="add-btn">导出</Button>
-        </div> -->
+		<div class="check-date">
+			<!-- <DatePicker size="large" v-model="date" placeholder="选择日期"></DatePicker> -->
+            <Button type="primary" class="add-btn" @click="exportor">用户导出</Button>
+			<!-- <Button type="primary" class="add-btn"></Button> -->
+        </div>
 		<div class="list">
 			<Table :loading="loading" :columns="columns" :data="data" stripe border class="table">
 				<template slot-scope="{ row, index }" slot="index">
 					{{ index + 1 }}
 				</template>
-				<template slot-scope="{ row }" slot="date">
+				<!-- <template slot-scope="{ row }" slot="date">
 					{{ row.addTime | formatDate }}
-				</template>
+				</template> -->
 				<template slot-scope="{ row }" slot="action">
 					<Button type="warning" size="small" style="margin-right: 5px" :to="{path:`/info/${row.id}`}">用户信息</Button>
 					<Poptip
@@ -26,7 +26,10 @@
 				</template>
 			</Table>
 			<div class="page-nav">
-				<Page show-total  show-sizer/>
+				<Page 
+					:total="total"
+					show-total
+					@on-change="changPageNum"/>
 			</div>
 		</div>
 	</div>
@@ -34,14 +37,15 @@
 
 <script>
 import moment from "moment";
-import { getPeople, deletePeo } from '@/http/http.js';
+import { getPeople, deletePeo, exportOrder } from '@/http/http.js';
 export default {
 	data ()  {
 		return {
 			date: new Date(),
 			loading: false,
-			pageNum: 1,
-			pageSize: 10,
+			page: 1,
+			rows: 10,
+			total: 0,
 			columns:[
 				{
 					title: "排名",
@@ -52,20 +56,20 @@ export default {
 					key: "name",
 				},
 				{
-					title: "注册时间",
-					slot: "date",
-				},
-				{
 					title: "乡村",
 					key: "village",
-				},
-				{
-					title: "分数",
-					key: "total",
 				},				
 				{
 					title: "镇",
 					key: "twon",
+				},
+				{
+					title: "机关",
+					key: "officeDetail",
+				},
+				{
+					title: "分数",
+					key: "total",
 				},
 				{
 					title: "操作",
@@ -87,10 +91,11 @@ export default {
 		},
 		getData(){
 			this.loading = true;
-			const { pageNum, pageSize } = this;
-			const params = { pageNum, pageSize };
-			getPeople().then( res => {
+			const { page, rows } = this;
+			const params = { page, rows };
+			getPeople(params).then( res => {
 				this.data = res.data.results;
+				this.total = res.data.pageInfo.totalQuantity;
 				this.loading = false;
 			})
 		},
@@ -99,6 +104,15 @@ export default {
 				this.$Message.success('删除成功');
 				this.getData();
 			})
+		},
+		/* 改变pageNum */
+		changPageNum(num) {
+			this.page = num;
+			this.getData();
+		},
+		//导出订单
+		exportor(){
+			window.open("http://mfclub.top/api/back/account/export1");   
 		}
 	},
 	mounted() {

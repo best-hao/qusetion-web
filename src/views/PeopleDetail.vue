@@ -10,16 +10,16 @@
 				<Avatar :src="formData.personPic" />
 			</FormItem>
 			<FormItem label="乡:">
-				{{formData.village}}
+				<Input class="input-2w" v-model="formData.village" placeholder=""/>
 			</FormItem>
 			<FormItem label="镇:">
-				{{formData.twon}}
+				<Input class="input-2w" v-model="formData.twon" placeholder=""/>
+			</FormItem>
+			<FormItem label="机关:">
+				<Input class="input-2w" v-model="formData.officeDetail" placeholder=""/>
 			</FormItem>
 			<FormItem label="分数:">
 				{{formData.total}}
-			</FormItem>
-			<FormItem label="镇办/机关:">
-				{{ formData.office == 1 ? '机关' : "镇办" }}
 			</FormItem>
 			<FormItem>
 				<Button type="primary" @click="submit">修改用户信息</Button>
@@ -42,7 +42,7 @@ export default {
 				name: "",
 				twon: "",
 				village: "",
-				office: "1",
+				officeDetail: "",
 				total: null,
 			},
 		}

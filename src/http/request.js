@@ -93,5 +93,26 @@ export const resvice = (url, params) => {
 	})
 }
 
+//订单导出
+// export const download = (url, params) => {
+
+// 	return new Promise((resolve, reject) => {
+// 		const responseType = 'arraybuffer';
+// 		instance.get(url,{ params, responseType })
+// 			.then((res) => {
+// 				console.log(res.data)
+// 				if(	res.data.errcode === 0  ){
+// 					resolve(res.data)
+// 				}else{
+// 					Message.error(res.data.errmsg);
+// 				}
+// 			})
+// 			.catch((error) => {
+// 				const msg = codeMessage[error.response.status];
+// 				Message.error(msg);
+// 			})
+// 	})
+// }
+
 
 
